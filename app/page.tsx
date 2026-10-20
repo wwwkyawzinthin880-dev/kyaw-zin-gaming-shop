@@ -1,0 +1,31 @@
+"use client";
+import { useState } from "react";
+
+const packages = [
+  { diamonds: 55, coins: 36 }, { diamonds: 86, coins: 47 }, { diamonds: 165, coins: 90 },
+  { diamonds: 172, coins: 95 }, { diamonds: 257, coins: 130 }, { diamonds: 275, coins: 140 },
+  { diamonds: 344, coins: 180 }, { diamonds: 447, coins: 220 }, { diamonds: 514, coins: 240 },
+  { diamonds: 565, coins: 275 }, { diamonds: 620, coins: 310 }, { diamonds: 706, coins: 345 },
+];
+export default function Home() {
+  const [selected, setSelected] = useState<number | null>(null);
+  const [topup, setTopup] = useState("200");
+  const [userId, setUserId] = useState("");
+  const [zoneId, setZoneId] = useState("");
+  const [message, setMessage] = useState("");
+  function requestAction(text: string) { setMessage(text); }
+  return <main><div className="wrap">
+    <nav className="nav"><a className="brand" href="#"><span className="logo">KZ</span><span>KYAW ZIN<br/>Gaming Shop</span></a><div className="navlinks"><a href="#wallet">Wallet</a><a href="#diamonds">Diamonds</a><a href="/owner" className="pill">Owner Login</a></div></nav>
+    <section className="hero"><div><div className="eyebrow">MLBB • THAI SERVER • THB ONLY</div><h1>Top up your game.<br/><span style={{color:"var(--cyan)"}}>Play without limits.</span></h1><p>Thai Baht နဲ့ COIN ဖြည့်ပြီး MLBB Diamond ကို အဆင်ပြေစွာ ဝယ်ယူနိုင်မယ့် KYAW ZIN Gaming Shop။ ငွေသွင်းမှုကို Owner အတည်ပြုပြီးမှ Wallet ထဲ COIN ထည့်ပေးပါမယ်။</p><a className="btn" href="#wallet">Wallet ဖြည့်မယ် ↘</a></div>
+    <div className="heroCard"><span className="tag">WALLET SYSTEM</span><div className="coin">1 THB = 1 COIN</div><p className="small">ငွေလွှဲပြေစာတင်ပါ။ Owner က ငွေရောက်ကြောင်း စစ်ဆေးပြီး အတည်ပြုပေးပါမယ်။</p><div style={{display:"flex",gap:8,flexWrap:"wrap",marginTop:16}}><span className="pill">Secure approval</span><span className="pill">Order history</span><span className="pill">Auto top-up ready</span></div></div></section>
+    <section id="wallet" className="section"><div className="sectionHead"><div><h2>Wallet ဖြည့်ရန်</h2><div className="small">အောက်ကပမာဏရွေးပြီး ငွေလွှဲပြေစာတင်နိုင်ပါတယ်။</div></div><span className="pill">THB / COIN</span></div>
+      <div className="panel"><div className="formgrid"><div className="field"><label>ငွေဖြည့်မည့်ပမာဏ (THB)</label><select value={topup} onChange={e=>setTopup(e.target.value)}>{["100","200","300","500","1000"].map(n=><option key={n} value={n}>{n} THB → {n} COIN</option>)}</select></div><div className="field"><label>ငွေလွှဲပြေစာ / Slip</label><input type="file" accept="image/*,.pdf" onChange={()=>requestAction("ပြေစာရွေးထားပါတယ်။ Live upload ကို Database/Storage ချိတ်ဆက်ပြီးမှ ဖွင့်ပေးပါမယ်။")}/></div><div className="field span2"><label>ငွေလွှဲ Reference / မှတ်ချက်</label><input placeholder="ဥပမာ - လွှဲသူအမည် သို့မဟုတ် transaction reference"/></div></div><div className="notice" style={{marginTop:16}}>သတိပြုရန် — ငွေတကယ်ရောက်မရောက် Owner က ဘဏ်အကောင့်တွင် စစ်ဆေးပြီးမှ COIN ဖြည့်ပေးမည်။ Slip ပုံတစ်ပုံတည်းကို အခြေခံပြီး အလိုအလျောက်အတည်မပြုပါ။</div><button className="btn" style={{marginTop:16}} onClick={()=>requestAction("Wallet top-up ကို လက်ခံသိမ်းဆည်းဖို့ secure login, database နဲ့ receipt storage ကို ချိတ်ဆက်ရပါမယ်။ လက်ရှိ preview မှာ ငွေလွှဲတောင်းဆိုမှု မပို့ရသေးပါ။")}>Top-up Request</button>{message&&<p className="small" role="status">{message}</p>}</div>
+    </section>
+    <section id="diamonds" className="section"><div className="sectionHead"><div><h2>MLBB Diamond Packages</h2><div className="small">Package ကိုရွေးပြီး Player ID ဖြည့်ပါ။</div></div><span className="pill">Thai Server</span></div>
+      <div className="grid">{packages.map(p=><button key={p.diamonds} className="package" style={{textAlign:"left",color:"inherit",outline:selected===p.diamonds?"2px solid var(--cyan)":undefined}} onClick={()=>{setSelected(p.diamonds);setMessage("");}}><div className="small">💎 MLBB DIAMOND</div><div className="amount">{p.diamonds} 💎</div><div className="price">{p.coins} COIN</div><div className="small">ရွေးချယ်ရန် {selected===p.diamonds?"✓":"→"}</div></button>)}</div>
+      <div className="panel" style={{marginTop:18}}><h3 style={{marginTop:0}}>Order Details</h3><div className="formgrid"><div className="field"><label>MLBB User ID</label><input value={userId} onChange={e=>setUserId(e.target.value)} inputMode="numeric" placeholder="User ID"/></div><div className="field"><label>Zone / Server ID</label><input value={zoneId} onChange={e=>setZoneId(e.target.value)} inputMode="numeric" placeholder="Zone ID"/></div><div className="span2"><div className="small">ရွေးထားသော package: <b>{selected ? selected+" Diamond" : "မရွေးရသေးပါ"}</b></div><div className="small">ကျသင့်ငွေ: <b>{selected ? (packages.find(p=>p.diamonds===selected)?.coins ?? 0)+" COIN" : "—"}</b></div></div></div><button className="btn" style={{marginTop:16}} disabled={!selected||!userId.trim()||!zoneId.trim()} onClick={()=>requestAction("Order ကိုတကယ်တင်ပြီး COIN ဖြတ်တောက်ရန် secure API, wallet database နဲ့ Supplier API ချိတ်ဆက်မှု လိုအပ်ပါသည်။ ယခု preview မှာ order မတင်ရသေးပါ။")}>Buy Diamond</button>{message&&<p className="small" role="status">{message}</p>}</div>
+    </section>
+    <section className="section"><div className="sectionHead"><div><h2>ဝယ်ယူပုံ</h2><div className="small">Wallet approval နဲ့ Auto Top-up flow</div></div></div><div className="steps"><div className="step"><span className="tag">STEP 01</span><b>ငွေလွှဲပြီး Slip တင်ပါ</b><span className="small">THB နဲ့ Wallet ဖြည့်ရန်တောင်းဆိုပါ။</span></div><div className="step"><span className="tag">STEP 02</span><b>Owner အတည်ပြုမယ်</b><span className="small">ငွေဝင်ကြောင်းစစ်ပြီး COIN ဖြည့်ပေးမယ်။</span></div><div className="step"><span className="tag">STEP 03</span><b>Diamond ဝယ်ပါ</b><span className="small">Player ID ထည့်ပြီး Supplier API မှတစ်ဆင့် ဖြည့်မယ်။</span></div></div></section>
+    <footer className="footer">© KYAW ZIN Gaming Shop · THB only · MLBB Thai Server<br/>ဤတည်ဆောက်ဆဲ preview တွင် ငွေလွှဲ၊ Wallet credit နှင့် Diamond delivery တို့ကို live ချိတ်ဆက်ထားခြင်း မရှိသေးပါ။</footer>
+  </div></main>;
+}
